@@ -1,0 +1,49 @@
+{
+    "name": "backend_urlshortener",
+    "version": "1.0.0",
+    "description": "��#\u0000 \u0000u\u0000r\u0000l\u0000-\u0000s\u0000h\u0000o\u0000r\u0000t\u0000e\u0000n\u0000e\u0000r\u0000-\u0000b\u0000a\u0000c\u0000k\u0000e\u0000n\u0000d\u0000\r\u0000 \u0000",
+    "main": "index.js",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "eslint": "^7.5.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.11",
+        "nodemon": "^2.0.4",
+        "prettier": "2.0.5"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/petrussola/url-shortener-backend.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/petrussola/url-shortener-backend/issues"
+    },
+    "homepage": "https://github.com/petrussola/url-shortener-backend#readme",
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx}": [
+            "eslint --fix"
+        ]
+    }
+}
