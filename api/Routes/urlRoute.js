@@ -11,7 +11,11 @@ let count = 0;
 router.get('/:url', (req, res) => {
     const { url } = req.params;
     const longUrl = urls[url];
-    res.status(200).json({ status: 'success', longUrl });
+    if (longUrl) {
+        res.status(200).json({ status: 'success', longUrl });
+    } else {
+        res.status(404).json({ status: 'fail', longUrl: '' });
+    }
 });
 
 router.post('/create-url', (req, res) => {
