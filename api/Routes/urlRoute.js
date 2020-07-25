@@ -1,28 +1,49 @@
 const express = require('express');
-
-const urls = require('../../data/urls');
+const db = require('../config/db-config');
+const { randomStr } = require('../Helpers/helpers'); // helper function to generate short URL
 
 const router = express.Router();
 
-let count = 0;
+// env variables to set length of the short string and chars available
+const charsAvailable = process.env.CHARS;
+const charsLength = process.env.LENGTH;
 
 // ROUTES
-
-router.get('/:url', (req, res) => {
+router.get('/:url', async (req, res) => {
     const { url } = req.params;
-    const longUrl = urls[url];
-    if (longUrl) {
-        res.status(200).json({ status: 'success', longUrl });
-    } else {
-        res.status(404).json({ status: 'fail', longUrl: '' });
+    try {
+        const results = await db('urls').where({ shortUrl: url }).first();
+        // if data is found
+        if (results) {
+            const longUrl = results.longUrl;
+            res.status(200).json({ status: 'success', longUrl });
+        } else {
+            // if data is not found, therefore results is undefinded
+            res.status(404).json({ status: 'fail', longUrl: '' });
+        }
+    } catch (error) {
+        res.status(500).json({ status: 'fail', message: error.message });
     }
 });
 
-router.post('/create-url', (req, res) => {
+router.post('/create-url', async (req, res) => {
+    // destructures the long url passed in the body
     const { newUrl } = req.body;
-    urls[count] = newUrl;
-    count++;
-    res.status(200).json({ status: 'success', url: count - 1 });
+    // generate string with 5 random chars using helper function
+    const randomShortUrl = randomStr(charsLength, charsAvailable);
+    try {
+        // tries insert into database
+        const result = await db('urls').insert(
+            {
+                longUrl: newUrl,
+                shortUrl: randomShortUrl,
+            },
+            ['id', 'shortUrl'] // returns id and the shortUrl
+        );
+        res.status(200).json({ status: 'success', url: result[0].shortUrl });
+    } catch (error) {
+        res.status(500).json({ status: 'fail', message: error.message });
+    }
 });
 
 module.exports = router;
