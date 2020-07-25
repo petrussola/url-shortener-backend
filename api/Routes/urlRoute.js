@@ -1,5 +1,5 @@
 const express = require('express');
-
+const db = require('../config/db-config');
 const urls = require('../../data/urls');
 
 const router = express.Router();
@@ -8,13 +8,20 @@ let count = 0;
 
 // ROUTES
 
-router.get('/:url', (req, res) => {
+router.get('/:url', async (req, res) => {
     const { url } = req.params;
-    const longUrl = urls[url];
-    if (longUrl) {
-        res.status(200).json({ status: 'success', longUrl });
-    } else {
-        res.status(404).json({ status: 'fail', longUrl: '' });
+    try {
+        const results = await db('urls').where({ shortUrl: url }).first();
+        // if data is found
+        if (results) {
+            const longUrl = results.longUrl;
+            res.status(200).json({ status: 'success', longUrl });
+        } else {
+            // if data is not found, therefore results is undefinded
+            res.status(404).json({ status: 'fail', longUrl: '' });
+        }
+    } catch (error) {
+        console.log(error);
     }
 });
 
