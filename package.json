@@ -24,6 +24,10 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js"
     },
+    "engines": {
+        "node": "10.16.1",
+        "npm": "6.13.2"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/petrussola/url-shortener-backend.git"
