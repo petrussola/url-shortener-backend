@@ -31,6 +31,7 @@ router.post('/create-url', async (req, res) => {
     const { newUrl } = req.body;
     // generate string with 5 random chars using helper function
     const randomShortUrl = randomStr(charsLength, charsAvailable);
+    console.log(randomShortUrl, '<< this is the short URL');
     try {
         // tries insert into database
         const result = await db('urls').insert(
