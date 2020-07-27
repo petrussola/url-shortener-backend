@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../config/db-config');
-const { randomStr } = require('../Helpers/helpers'); // helper function to generate short URL
+const { randomStr } = require('../Helpers/helpers.js'); // helper function to generate short URL
 
 const router = express.Router();
 
