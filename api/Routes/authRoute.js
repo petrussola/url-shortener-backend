@@ -14,11 +14,14 @@ router.post('/signup', [hashPassword], async (req, res) => {
         const newUser = await createUser({ email, password });
         res.status(200).json({
             status: 'success',
-            message: 'user created',
+            message: 'Sign up succesful. Please log in.',
             data: newUser,
         });
     } catch (error) {
-        res.status(500).json({ status: 'fail', message: error.message });
+        res.status(500).json({
+            status: 'fail',
+            message: 'This email already exists. Please select another one.',
+        });
     }
 });
 
