@@ -4,6 +4,7 @@ const helmet = require('helmet');
 
 // Routes
 const urlRoute = require('./Routes/urlRoute');
+const authRoute = require('./Routes/authRoute');
 
 const server = express();
 
@@ -12,5 +13,6 @@ server.use(helmet());
 server.use(express.json());
 
 server.use('/', urlRoute);
+server.use('/auth', authRoute);
 
 module.exports = server;
