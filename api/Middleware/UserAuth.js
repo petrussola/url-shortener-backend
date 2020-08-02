@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // models
 const { getUserByEmail } = require('../Models/UserModel');
@@ -6,6 +7,7 @@ const { getUserByEmail } = require('../Models/UserModel');
 module.exports = {
     hashPassword,
     checkHashedPassword,
+    authenticateJwt,
 };
 
 function hashPassword(req, res, next) {
@@ -39,5 +41,21 @@ async function checkHashedPassword(req, res, next) {
             });
     } catch (error) {
         console.log(error.message);
+    }
+}
+
+function authenticateJwt(req, res, next) {
+    const token = req.headers.authorization;
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if (err) {
+                res.status(401).json({ status: 'fail', message: 'Bad Token' });
+            } else {
+                req.decodedToken = decodedToken;
+                next();
+            }
+        });
+    } else {
+        res.status(401).json({ message: `No credentials provided` });
     }
 }
