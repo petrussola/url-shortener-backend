@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+
 // models
 const { getUserByEmail } = require('../Models/UserModel');
 
@@ -45,7 +46,7 @@ async function checkHashedPassword(req, res, next) {
 }
 
 function authenticateJwt(req, res, next) {
-    const token = req.headers.authorization;
+    const { token } = req.cookies;
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
             if (err) {

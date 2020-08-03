@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 
 // Routes
 const urlRoute = require('./Routes/urlRoute');
@@ -14,11 +15,12 @@ const server = express();
 server.use(cors());
 server.use(helmet());
 server.use(express.json());
+server.use(cookieParser());
 
 server.use('/auth', authRoute);
 // check jwt
 server.use(authenticateJwt);
 // shorten url
-server.use('/', urlRoute);
+server.use('', urlRoute);
 
 module.exports = server;

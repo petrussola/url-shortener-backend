@@ -31,6 +31,7 @@ router.post('/signup', [hashPassword], async (req, res) => {
 router.post('/login', [checkHashedPassword], (req, res) => {
     // generates jwt token
     const token = generateToken(req.user);
+    res.cookie('token', token, { httpOnly: true });
     res.status(200).json({
         status: 'success',
         message: 'Succesful login',
