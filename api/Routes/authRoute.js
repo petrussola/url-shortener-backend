@@ -4,7 +4,11 @@ const express = require('express');
 const { createUser } = require('../Models/UserModel');
 
 // middleware
-const { hashPassword, checkHashedPassword } = require('../Middleware/UserAuth');
+const {
+    hashPassword,
+    checkHashedPassword,
+    authenticateJwt,
+} = require('../Middleware/UserAuth');
 
 // helpers
 const { generateToken } = require('../config/jwt');
@@ -32,11 +36,18 @@ router.post('/login', [checkHashedPassword], (req, res) => {
     // generates jwt token
     const token = generateToken(req.user);
     res.cookie('token', token, { httpOnly: true });
+    res.cookie('isLoggedIn', true, { httpOnly: false });
     res.status(200).json({
         status: 'success',
         message: 'Succesful login',
         data: { ...req.user, token },
     });
+});
+
+router.get('/logout', [authenticateJwt], (req, res) => {
+    res.cookie('token', 'deleted', { httpOnly: true });
+    res.cookie('isLoggedIn', false);
+    res.status(200).json({ status: 'success', message: 'You are logged out' });
 });
 
 module.exports = router;
