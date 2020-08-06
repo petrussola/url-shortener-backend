@@ -50,4 +50,8 @@ router.get('/logout', [authenticateJwt], (req, res) => {
     res.status(200).json({ status: 'success', message: 'You are logged out' });
 });
 
+router.get('/csrf-token', (req, res) => {
+    res.status(200).json({ csrfToken: req.csrfToken() });
+});
+
 module.exports = router;
