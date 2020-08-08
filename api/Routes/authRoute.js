@@ -35,8 +35,18 @@ router.post('/signup', [hashPassword], async (req, res) => {
 router.post('/login', [checkHashedPassword], (req, res) => {
     // generates jwt token
     const token = generateToken(req.user);
-    res.cookie('token', token, { httpOnly: true });
-    res.cookie('isLoggedIn', true, { httpOnly: false });
+    res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
+    res.cookie('isLoggedIn', true, {
+        httpOnly: false,
+        sameSite: 'strict',
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
     res.status(200).json({
         status: 'success',
         message: 'Succesful login',

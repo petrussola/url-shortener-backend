@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
@@ -9,11 +8,14 @@ const authRoute = require('./Routes/authRoute');
 
 // Helpers
 const { authenticateJwt } = require('./Middleware/UserAuth');
+
+// Config
 const csrfProtection = require('./config/csrfProtection');
+const cors = require('./config/cors');
 
 const server = express();
 
-server.use(cors());
+server.use(cors);
 server.use(helmet());
 server.use(express.json());
 server.use(cookieParser());
