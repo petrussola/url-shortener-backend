@@ -12,6 +12,7 @@ const {
 
 // helpers
 const { generateToken } = require('../config/jwt');
+const cookieParams = require('../Helpers/cookies');
 
 const router = express.Router();
 
@@ -36,15 +37,15 @@ router.post('/login', [checkHashedPassword], (req, res) => {
     // generates jwt token
     const token = generateToken(req.user);
     res.cookie('token', token, {
+        ...cookieParams, // sets secure attribute based on dev or production environment
         httpOnly: true,
         sameSite: 'strict',
-        secure: true,
         maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     res.cookie('isLoggedIn', true, {
+        ...cookieParams, // sets secure attribute based on dev or production environment
         httpOnly: false,
         sameSite: 'strict',
-        secure: true,
         maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     res.status(200).json({
