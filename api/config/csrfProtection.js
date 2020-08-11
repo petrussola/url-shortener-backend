@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === 'development') {
         cookie: {
             httpOnly: true,
             secure: true,
+            path: '',
             domain: process.env.CSRF_PROTECTION_HOST, // host (NOT DOMAIN, NOT HTTP:// OR HTTPS://)!
         },
     });
