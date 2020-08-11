@@ -12,12 +12,7 @@ if (process.env.NODE_ENV === 'development') {
     });
 } else {
     csrfProtection = csrf({
-        cookie: {
-            httpOnly: true,
-            secure: true,
-            path: '',
-            domain: process.env.CSRF_PROTECTION_HOST, // host (NOT DOMAIN, NOT HTTP:// OR HTTPS://)!
-        },
+        cookie: true,
     });
 }
 
