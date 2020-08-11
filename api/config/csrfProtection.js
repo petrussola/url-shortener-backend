@@ -3,6 +3,7 @@ const csrf = require('csurf');
 let csrfProtection = null;
 
 if (process.env.NODE_ENV === 'development') {
+    console.log('>>> dev <<<');
     csrfProtection = csrf({
         cookie: {
             httpOnly: true,
@@ -11,6 +12,7 @@ if (process.env.NODE_ENV === 'development') {
         },
     });
 } else {
+    console.log('>>> prod <<<');
     csrfProtection = csrf({
         cookie: {
             httpOnly: true,
