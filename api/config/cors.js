@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
     };
 } else {
     corsConfig = {
-        origin: false,
+        origin: process.env.DEV_FRONTEND_URL,
         optionsSuccessStatus: 200,
     };
 }
