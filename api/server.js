@@ -6,9 +6,6 @@ const cookieParser = require('cookie-parser');
 const urlRoute = require('./Routes/urlRoute');
 const authRoute = require('./Routes/authRoute');
 
-// Helpers
-const { authenticateJwt } = require('./Middleware/UserAuth');
-
 // Config
 const csrfProtection = require('./config/csrfProtection');
 const cors = require('./config/cors');
@@ -22,9 +19,17 @@ server.use(cookieParser());
 server.use(csrfProtection);
 
 server.use('/auth', authRoute);
-// check jwt
-server.use(authenticateJwt);
-// shorten url
+
+// url-related actions
 server.use('', urlRoute);
+// csrf error handler
+// error handler
+server.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err);
+
+    // handle CSRF token errors here
+    res.status(403);
+    res.send('form tampered with');
+});
 
 module.exports = server;

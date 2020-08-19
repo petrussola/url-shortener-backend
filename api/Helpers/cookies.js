@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     cookieParams = {
         secure: true,
+        sameSite: 'strict',
     };
 }
 

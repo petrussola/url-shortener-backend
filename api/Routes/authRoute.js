@@ -39,16 +39,14 @@ router.post('/login', [checkHashedPassword], (req, res) => {
     res.cookie('token', token, {
         ...cookieParams, // sets secure attribute based on dev or production environment
         httpOnly: true,
-        sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24, // 1 day
-        domain: 'localhost:3000',
+        domain: process.env.CSRF_PROTECTION_HOST,
     });
     res.cookie('isLoggedIn', true, {
         ...cookieParams, // sets secure attribute based on dev or production environment
         httpOnly: false,
-        sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24, // 1 day
-        domain: 'localhost:3000',
+        domain: process.env.CSRF_PROTECTION_HOST,
     });
     res.status(200).json({
         status: 'success',
@@ -66,6 +64,7 @@ router.get('/logout', [authenticateJwt], (req, res) => {
 router.get('/csrf-token', (req, res) => {
     const token = req.csrfToken();
     res.status(200).json({ csrfToken: token });
+    // res.status(200).send();
 });
 
 module.exports = router;
