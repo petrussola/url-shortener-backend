@@ -40,7 +40,7 @@ async function checkHashedPassword(req, res, next) {
                 message: 'Invalid credentials',
             });
     } catch (error) {
-        console.log(error.message);
+        res.status(500).json({ message: error.message });
     }
 }
 

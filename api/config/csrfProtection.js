@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
             maxAge: 1000 * 60 * 60 * 24, // 1 day
             httpOnly: true,
             secure: true,
-            domain: process.env.CSRF_PROTECTION_HOST, // host (NOT DOMAIN, NOT HTTP:// OR HTTPS://)!
+            // domain: process.env.CSRF_PROTECTION_HOST, // host (NOT DOMAIN, NOT HTTP:// OR HTTPS://)!
             sameSite: 'strict',
         },
     });

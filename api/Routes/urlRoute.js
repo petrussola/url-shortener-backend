@@ -1,6 +1,10 @@
+// dependencies
 const express = require('express');
+
+// helpers
 const db = require('../config/db-config');
 const { randomStr } = require('../Helpers/helpers.js'); // helper function to generate short URL
+const { authenticateJwt } = require('../Middleware/UserAuth');
 
 const router = express.Router();
 
@@ -26,12 +30,11 @@ router.get('/:url', async (req, res) => {
     }
 });
 
-router.post('/create-url', async (req, res) => {
+router.post('/create-url', authenticateJwt, async (req, res) => {
     // destructures the long url passed in the body
     const { newUrl } = req.body;
     // generate string with 5 random chars using helper function
     const randomShortUrl = randomStr(charsLength, charsAvailable);
-    console.log(randomShortUrl, '<< this is the short URL');
     try {
         // tries insert into database
         const result = await db('urls').insert(
