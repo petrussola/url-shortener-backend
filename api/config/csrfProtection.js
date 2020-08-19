@@ -14,10 +14,10 @@ if (process.env.NODE_ENV === 'development') {
     csrfProtection = csrf({
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, // 1 day
-            httpOnly: true,
-            secure: true,
+            httpOnly: process.env.HTTP_ONLY,
+            secure: process.env.SECURE,
             domain: process.env.CSRF_PROTECTION_HOST, // host (NOT DOMAIN, NOT HTTP:// OR HTTPS://)!
-            sameSite: 'strict',
+            sameSite: process.env.SAME_SITE,
         },
     });
 }
