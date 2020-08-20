@@ -13,6 +13,10 @@ const charsAvailable = process.env.CHARS;
 const charsLength = process.env.LENGTH;
 
 // ROUTES
+router.get('/', (req, res) => {
+    res.status(200).json({ message: 'hey, server is up and running!' });
+});
+
 router.get('/:url', async (req, res) => {
     const { url } = req.params;
     try {
