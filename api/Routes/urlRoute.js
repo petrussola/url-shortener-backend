@@ -51,7 +51,12 @@ router.post('/create-url', authenticateJwt, async (req, res) => {
             },
             ['id', 'shortUrl'] // returns id and the shortUrl
         );
-        res.status(200).json({ status: 'success', url: result[0].shortUrl });
+        const urlsUser = await db('urls').where({ userId: id });
+        res.status(200).json({
+            status: 'success',
+            url: result[0].shortUrl,
+            urlsUser,
+        });
     } catch (error) {
         res.status(500).json({ status: 'fail', message: error.message });
     }
