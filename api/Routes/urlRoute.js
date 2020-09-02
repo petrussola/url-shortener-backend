@@ -37,6 +37,8 @@ router.get('/:url', async (req, res) => {
 router.post('/create-url', authenticateJwt, async (req, res) => {
     // destructures the long url passed in the body
     const { newUrl } = req.body;
+    // destructuring user id
+    const { id } = req.decodedToken;
     // generate string with 5 random chars using helper function
     const randomShortUrl = randomStr(charsLength, charsAvailable);
     try {
@@ -45,10 +47,16 @@ router.post('/create-url', authenticateJwt, async (req, res) => {
             {
                 longUrl: newUrl,
                 shortUrl: randomShortUrl,
+                userId: id,
             },
             ['id', 'shortUrl'] // returns id and the shortUrl
         );
-        res.status(200).json({ status: 'success', url: result[0].shortUrl });
+        const urlsUser = await db('urls').where({ userId: id });
+        res.status(200).json({
+            status: 'success',
+            url: result[0].shortUrl,
+            urlsUser,
+        });
     } catch (error) {
         res.status(500).json({ status: 'fail', message: error.message });
     }
