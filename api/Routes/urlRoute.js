@@ -17,6 +17,17 @@ router.get('/', (req, res) => {
     res.status(200).json({ message: 'hey, server is up and running!' });
 });
 
+router.get('/list-urls', authenticateJwt, async (req, res) => {
+    // destructuring user id
+    const { id } = req.decodedToken;
+    try {
+        const data = await db('urls').where({ userId: id });
+        res.status(200).json({ status: 'success', data });
+    } catch (error) {
+        res.status(500).json({ status: 'fail', message: error.message });
+    }
+});
+
 router.get('/:url', async (req, res) => {
     const { url } = req.params;
     try {
