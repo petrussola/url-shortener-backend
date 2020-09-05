@@ -45,6 +45,7 @@ async function checkHashedPassword(req, res, next) {
 }
 
 function authenticateJwt(req, res, next) {
+    console.log(req.cookies);
     const { token } = req.cookies;
     console.log(token, 'blabla');
     if (token) {

@@ -48,7 +48,6 @@ router.post('/login', [checkHashedPassword], (req, res) => {
         maxAge: 1000 * 60 * 60 * 24, // 1 day
         domain: process.env.CSRF_PROTECTION_HOST,
     });
-    console.log(res.cookie);
     res.status(200).json({
         status: 'success',
         message: 'Succesful login',
