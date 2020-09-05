@@ -56,7 +56,6 @@ router.post('/login', [checkHashedPassword], (req, res) => {
 });
 
 router.get('/logout', [authenticateJwt], (req, res) => {
-    console.log('in the resposnse stage');
     // res.cookie('token', 'deleted', { httpOnly: true });
     res.cookie('isLoggedIn', false, { httpOnly: false });
     res.status(200).json({ status: 'success', message: 'You are logged out' });
