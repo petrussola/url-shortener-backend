@@ -46,6 +46,7 @@ async function checkHashedPassword(req, res, next) {
 
 function authenticateJwt(req, res, next) {
     const { token } = req.cookies;
+    console.log(token);
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
             if (err) {
