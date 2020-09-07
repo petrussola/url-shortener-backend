@@ -5,13 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
-            "request": "launch",
             "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}\\index.js"
+            "program": "${workspaceFolder}/index.js",
+            "request": "launch",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "pwa-node"
+        },
+
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Heroku",
+            "address": "localhost",
+            "port": 9229,
+            "protocol": "inspector",
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/app"
         }
     ]
 }

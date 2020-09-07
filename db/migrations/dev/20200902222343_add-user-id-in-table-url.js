@@ -1,26 +1,18 @@
 exports.up = function (knex) {
-    function addUserIdColumn() {
-        return knex.schema.table('urls', (table) => {
-            table
-                .integer('userId')
-                .unsigned()
-                .notNullable()
-                .defaultTo(1)
-                .references('id')
-                .inTable('urls');
-        });
-    }
-    function removeDefaultFromUserId() {
-        return knex.schema.alterTable('urls', (table) => {
-            table.integer('userId').notNullable().alter();
-        });
-    }
-
-    return addUserIdColumn().then(removeDefaultFromUserId);
+    return knex.schema.table('urls', (table) => {
+        table
+            .integer('userId')
+            .unsigned()
+            .notNullable()
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+    });
 };
 
 exports.down = function (knex) {
-    return knex.schema('urls', (table) => {
-        table.dropcolumn('userId');
+    return knex.schema.table('urls', (table) => {
+        table.dropColumn('userId');
     });
 };
