@@ -1,13 +1,15 @@
 const express = require('express');
 
 // models
-const { createUser } = require('../Models/UserModel');
+const { createUser, approveUser } = require('../Models/UserModel');
 
 // middleware
 const {
     hashPassword,
     checkHashedPassword,
     authenticateJwt,
+    checkIfAdmin,
+    fetchToBeApprovedUsers,
 } = require('../Middleware/UserAuth');
 
 // helpers
@@ -19,7 +21,12 @@ const router = express.Router();
 router.post('/signup', [hashPassword], async (req, res) => {
     const { email, password } = req.body;
     try {
-        const newUser = await createUser({ email, password });
+        const newUser = await createUser({
+            email,
+            password,
+            admin: false,
+            approved: false,
+        });
         res.status(200).json({
             status: 'success',
             message: 'Sign up succesful. Please log in.',
@@ -33,27 +40,33 @@ router.post('/signup', [hashPassword], async (req, res) => {
     }
 });
 
-router.post('/login', [checkHashedPassword], (req, res) => {
-    // generates jwt token
-    const token = generateToken(req.user);
-    res.cookie('token', token, {
-        ...cookieParams, // sets secure attribute based on dev or production environment
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, // 1 day
-        domain: process.env.CSRF_PROTECTION_HOST,
-    });
-    res.cookie('isLoggedIn', true, {
-        ...cookieParams, // sets secure attribute based on dev or production environment
-        httpOnly: false,
-        maxAge: 1000 * 60 * 60 * 24, // 1 day
-        domain: process.env.CSRF_PROTECTION_HOST,
-    });
-    res.status(200).json({
-        status: 'success',
-        message: 'Succesful login',
-        data: { ...req.user, token },
-    });
-});
+router.post(
+    '/login',
+    [checkHashedPassword, checkIfAdmin, fetchToBeApprovedUsers],
+    (req, res) => {
+        // generates jwt token
+        const token = generateToken(req.user);
+        const { tobeapproved } = req;
+        res.cookie('token', token, {
+            ...cookieParams, // sets secure attribute based on dev or production environment
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24, // 1 day
+            domain: process.env.CSRF_PROTECTION_HOST,
+        });
+        res.cookie('isLoggedIn', true, {
+            ...cookieParams, // sets secure attribute based on dev or production environment
+            httpOnly: false,
+            maxAge: 1000 * 60 * 60 * 24, // 1 day
+            domain: process.env.CSRF_PROTECTION_HOST,
+        });
+        res.status(200).json({
+            status: 'success',
+            message: 'Succesful login',
+            data: { ...req.user, token },
+            tobeapproved,
+        });
+    }
+);
 
 router.get('/logout', [authenticateJwt], (req, res) => {
     // res.cookie('token', 'deleted', { httpOnly: true });
@@ -66,5 +79,19 @@ router.get('/csrf-token', (req, res) => {
     res.status(200).json({ csrfToken: token });
     // res.status(200).send();
 });
+
+router.post(
+    '/approve-user',
+    [authenticateJwt, checkIfAdmin],
+    async (req, res) => {
+        const { id } = req.body;
+        try {
+            const tobeapproved = await approveUser(id);
+            res.status(200).json({ message: 'success', tobeapproved });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
 
 module.exports = router;

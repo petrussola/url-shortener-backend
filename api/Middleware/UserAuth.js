@@ -2,12 +2,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // models
-const { getUserByEmail } = require('../Models/UserModel');
+const { getUserByEmail, getUsersToBeApproved } = require('../Models/UserModel');
 
 module.exports = {
     hashPassword,
     checkHashedPassword,
     authenticateJwt,
+    checkIfAdmin,
+    fetchToBeApprovedUsers,
 };
 
 function hashPassword(req, res, next) {
@@ -31,6 +33,8 @@ async function checkHashedPassword(req, res, next) {
             req.user = {
                 id: user.id,
                 email: user.email,
+                admin: user.admin,
+                approved: user.approved,
             };
             return next();
         } // if no user was found
@@ -57,5 +61,33 @@ function authenticateJwt(req, res, next) {
         });
     } else {
         res.status(401).json({ message: `No credentials provided` });
+    }
+}
+
+async function checkIfAdmin(req, res, next) {
+    if (req.decodedToken && req.decodedToken.admin) {
+        req.isAdmin = true;
+        next();
+    } else if (req.user && req.user.admin) {
+        req.isAdmin = true;
+        next();
+    } else {
+        res.status(401).json({
+            status: 'fail',
+            message: 'You need to be admin to fetch this section',
+        });
+    }
+}
+
+async function fetchToBeApprovedUsers(req, res, next) {
+    if (req.isAdmin) {
+        const users = await getUsersToBeApproved();
+        req.tobeapproved = users;
+        next();
+    } else {
+        res.status(401).json({
+            status: 'fail',
+            message: 'You need to be admin to fetch this section',
+        });
     }
 }
