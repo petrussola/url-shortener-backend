@@ -10,6 +10,7 @@ const {
     authenticateJwt,
     checkIfAdmin,
     fetchToBeApprovedUsers,
+    fetchAllUsers,
 } = require('../Middleware/UserAuth');
 
 // helpers
@@ -42,11 +43,11 @@ router.post('/signup', [hashPassword], async (req, res) => {
 
 router.post(
     '/login',
-    [checkHashedPassword, checkIfAdmin, fetchToBeApprovedUsers],
+    [checkHashedPassword, checkIfAdmin, fetchToBeApprovedUsers, fetchAllUsers],
     (req, res) => {
         // generates jwt token
         const token = generateToken(req.user);
-        const { tobeapproved } = req;
+        const { tobeapproved, allusers } = req;
         res.cookie('token', token, {
             ...cookieParams, // sets secure attribute based on dev or production environment
             httpOnly: true,
@@ -64,6 +65,7 @@ router.post(
             message: 'Succesful login',
             data: { ...req.user, token },
             tobeapproved,
+            allusers,
         });
     }
 );

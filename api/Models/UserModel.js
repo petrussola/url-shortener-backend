@@ -5,6 +5,7 @@ module.exports = {
     getUserByEmail,
     getUsersToBeApproved,
     approveUser,
+    getAllUsers,
 };
 
 function createUser(user) {
@@ -29,4 +30,8 @@ function approveUser(id) {
         .catch((error) => {
             return error.message;
         });
+}
+
+function getAllUsers() {
+    return db.select('id', 'email', 'admin', 'approved').from('users');
 }

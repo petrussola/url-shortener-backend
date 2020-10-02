@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // models
-const { getUserByEmail, getUsersToBeApproved } = require('../Models/UserModel');
+const {
+    getUserByEmail,
+    getUsersToBeApproved,
+    getAllUsers,
+} = require('../Models/UserModel');
 
 module.exports = {
     hashPassword,
@@ -10,6 +14,7 @@ module.exports = {
     authenticateJwt,
     checkIfAdmin,
     fetchToBeApprovedUsers,
+    fetchAllUsers,
 };
 
 function hashPassword(req, res, next) {
@@ -83,6 +88,19 @@ async function fetchToBeApprovedUsers(req, res, next) {
     if (req.isAdmin) {
         const users = await getUsersToBeApproved();
         req.tobeapproved = users;
+        next();
+    } else {
+        res.status(401).json({
+            status: 'fail',
+            message: 'You need to be admin to fetch this section',
+        });
+    }
+}
+
+async function fetchAllUsers(req, res, next) {
+    if (req.isAdmin) {
+        const users = await getAllUsers();
+        req.allusers = users;
         next();
     } else {
         res.status(401).json({
