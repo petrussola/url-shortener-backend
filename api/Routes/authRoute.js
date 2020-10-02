@@ -1,7 +1,11 @@
 const express = require('express');
 
 // models
-const { createUser, approveUser } = require('../Models/UserModel');
+const {
+    createUser,
+    approveUser,
+    unapproveUser,
+} = require('../Models/UserModel');
 
 // middleware
 const {
@@ -89,6 +93,20 @@ router.post(
         const { id } = req.body;
         try {
             const tobeapproved = await approveUser(id);
+            res.status(200).json({ message: 'success', tobeapproved });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+router.post(
+    '/unapprove-user',
+    [authenticateJwt, checkIfAdmin],
+    async (req, res) => {
+        const { id } = req.body;
+        try {
+            const tobeapproved = await unapproveUser(id);
             res.status(200).json({ message: 'success', tobeapproved });
         } catch (error) {
             console.log(error);
