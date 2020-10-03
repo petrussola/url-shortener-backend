@@ -77,10 +77,7 @@ async function checkIfAdmin(req, res, next) {
         req.isAdmin = true;
         next();
     } else {
-        res.status(401).json({
-            status: 'fail',
-            message: 'You need to be admin to fetch this section',
-        });
+        next();
     }
 }
 
@@ -90,10 +87,7 @@ async function fetchToBeApprovedUsers(req, res, next) {
         req.tobeapproved = users;
         next();
     } else {
-        res.status(401).json({
-            status: 'fail',
-            message: 'You need to be admin to fetch this section',
-        });
+        next();
     }
 }
 
@@ -103,9 +97,6 @@ async function fetchAllUsers(req, res, next) {
         req.allusers = users;
         next();
     } else {
-        res.status(401).json({
-            status: 'fail',
-            message: 'You need to be admin to fetch this section',
-        });
+        next();
     }
 }
