@@ -5,6 +5,7 @@ const {
     createUser,
     approveUser,
     unapproveUser,
+    getAllUsers,
 } = require('../Models/UserModel');
 
 // middleware
@@ -93,7 +94,12 @@ router.post(
         const { id } = req.body;
         try {
             const tobeapproved = await approveUser(id);
-            res.status(200).json({ message: 'success', tobeapproved });
+            const allUsers = await getAllUsers();
+            res.status(200).json({
+                message: 'success',
+                tobeapproved,
+                allUsers,
+            });
         } catch (error) {
             console.log(error);
         }
@@ -107,7 +113,12 @@ router.post(
         const { id } = req.body;
         try {
             const tobeapproved = await unapproveUser(id);
-            res.status(200).json({ message: 'success', tobeapproved });
+            const allUsers = await getAllUsers();
+            res.status(200).json({
+                message: 'success',
+                tobeapproved,
+                allUsers,
+            });
         } catch (error) {
             console.log(error);
         }
