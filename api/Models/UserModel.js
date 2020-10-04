@@ -46,5 +46,10 @@ function unapproveUser(id) {
 }
 
 function getAllUsers() {
-    return db.select('id', 'email', 'admin', 'approved').from('users');
+    return db
+        .select('users.id', 'users.email', 'users.admin', 'users.approved')
+        .count('urls.userId')
+        .from('users')
+        .leftJoin('urls', 'urls.userId', 'users.id')
+        .groupBy('users.id');
 }
