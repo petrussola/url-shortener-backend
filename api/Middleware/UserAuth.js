@@ -94,7 +94,15 @@ async function fetchToBeApprovedUsers(req, res, next) {
 async function fetchAllUsers(req, res, next) {
     if (req.isAdmin) {
         const users = await getAllUsers();
-        req.allusers = users;
+        const usersSanitized = [];
+        for (let user of users) {
+            let newUser = {
+                ...user,
+                count: parseInt(user.count, 10),
+            };
+            usersSanitized.push(newUser);
+        }
+        req.allusers = usersSanitized;
         next();
     } else {
         next();
