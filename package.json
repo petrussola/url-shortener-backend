@@ -4,8 +4,16 @@
     "description": "��#\u0000 \u0000u\u0000r\u0000l\u0000-\u0000s\u0000h\u0000o\u0000r\u0000t\u0000e\u0000n\u0000e\u0000r\u0000-\u0000b\u0000a\u0000c\u0000k\u0000e\u0000n\u0000d\u0000\r\u0000 \u0000",
     "main": "index.js",
     "dependencies": {
+        "bcrypt": "^5.0.0",
+        "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
-        "express": "^4.17.1"
+        "csurf": "^1.11.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "helmet": "^3.23.3",
+        "jsonwebtoken": "^8.5.1",
+        "knex": "^0.21.2",
+        "pg": "^8.3.0"
     },
     "devDependencies": {
         "eslint": "^7.5.0",
@@ -17,7 +25,12 @@
         "prettier": "2.0.5"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "engines": {
+        "node": "10.16.1",
+        "npm": "6.13.2"
     },
     "repository": {
         "type": "git",
@@ -33,7 +46,7 @@
     "prettier": {
         "trailingComma": "es5",
         "tabWidth": 4,
-        "semi": false,
+        "semi": true,
         "singleQuote": true
     },
     "husky": {
